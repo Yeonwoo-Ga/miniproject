@@ -15,6 +15,32 @@
     <script type="text/javascript">
 
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+     <script>
+
+        function membership() {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/membership",
+                    data: {
+                        id_give: $('#id').val(),
+                        pw_give: $('#password').val(),
+                        nickname_give: $('#username').val()
+                    },
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            alert('회원가입이 완료되었습니다.')
+                            window.location.href = '/login'
+                        } else {
+                            alert(response['msg'])
+                        }
+                    }
+                })
+            }
+
+    </script>
+
+
 </head>
 
 <body>
@@ -25,8 +51,8 @@
             <div class="membership">
                 <label for="id">ID :<input type="text" id="id"></label>
                 <label for="password">PASSWORD :<input type="password" id="password"></label>
-                <label for="password_check">PASSWORD 확인 :<input type="password" id="password_check"></label>
-                <button type="button" id="sign">회원가입</button>
+                <label for="username">NICKNAME :<input type="username" id="username"></label>
+                <button type="button" id="sign"onclick="membership()">회원가입</button>
             </div>
         </form>
     </div>
