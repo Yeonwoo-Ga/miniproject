@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arsenal Fan Site</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/reset.css">
+    <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="../static/css/footer.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    </script>
+</head>
+
+<body>
+    {% include "layout/header.html" %}
+    {% block section %}
+    <div class="viewWrap">
+        <div class="posts">
+            <div class="info">
+                <h1 id="show_writer">작성자</h1>
+                <h2 id="show_date">날짜</h2>
+            </div>
+
+            <div class="content"><img src="" alt="">
+                <p>내용</p>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    {% include "layout/footer.html" %}
+
+
+
+</body>
+
+</html>

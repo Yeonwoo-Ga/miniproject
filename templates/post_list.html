@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arsenal Fan Site</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/reset.css">
+    <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="../static/css/footer.css">
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            bsCustomFileInput.init()
+            listing()
+        })
+
+
+
+        function listing() {
+            $.ajax({
+                type: "GET",
+                url: "/list",
+                data: {},
+                success: function (response) {
+                    let lists = response['all_lists']
+                    for (let i = 0; i < lists.length; i++) {
+                        let title = lists[i]['title']
+                        let file = lists[i]['file']
+
+
+                        let temp_html = `<li id="post">
+                                            <a href="/post_view">
+                                                <p>${title}</p>
+                                                <div id="image"><img src="../static/img/${file}" alt=""></div>
+                                            </a>
+                                        </li>
+                        `
+
+                        $('#list-box').append(temp_html)
+                    }
+                }
+            })
+        }
+
+        // function search() {
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/post_list",
+        //         data: {},
+        //         success: function (response) {
+        //             let search_text = $('#search').val();
+        //             let db_text = response['title']
+        //             console.log(response)
+        //
+        //         }
+        //     })
+        // }
+    </script>
+</head>
+
+<body>
+{% include "layout/header.html" %}
+{% block section %}
+<div class="postWrap">
+    <div class="btnWrap">
+        <button type="button"><a href="/post_write">글 쓰기 +</a></button>
+        <input type="text" id="search" class="search" placeholder="제목을 검색해 주세요">
+        <button id="searchBtn" onclick="search()">검색 &#128269;</button>
+    </div>
+    <div class="post_list">
+        <ul class="list" id="list-box">
+            <li id="post">
+                <a href="/post_view">
+                    <p>게시글 번호?</p>
+                    <div id="image">이미지<img src="" alt=""></div>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <p></p>
+                    <div>이미지<img src="" alt=""></div>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <p></p>
+                    <div>이미지<img src="" alt=""></div>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <p></p>
+                    <div>이미지<img src="" alt=""></div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+{% include "layout/footer.html" %}
+
+</body>
+
+</html>

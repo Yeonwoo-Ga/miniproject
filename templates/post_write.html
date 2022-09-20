@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arsenal Fan Site</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/reset.css">
+    <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="../static/css/footer.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        function posting() {
+            let title = $('#title').val()
+            let text = $("#text").val()
+            let file = $('#file')[0].files[0]
+            let form_data = new FormData()
+
+            form_data.append("file_give", file)
+            form_data.append("title_give", title)
+            form_data.append("text_give", text)
+
+            $.ajax({
+                type: "POST",
+                url: "/list",
+                data: form_data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.href='/post_list'
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    {% include "layout/header.html" %}
+    {% block section %}
+    <div class="writeWrap">
+        <div class="top">
+            <div class="title"><input type="text" id="title" placeholder="제목을 입력해 주세요"></div>
+            <div class="addpost"><button type="button" id="addpost" onclick="posting()" >글 추가
+                &#43;</button></div>
+        </div>
+
+        <div class="writeBox">
+            <p class="photo"><input type="file" id="file"></p>
+            <div><textarea id="text" placeholder="내용을 입력해 주세요"></textarea></div>
+        </div>
+    </div>
+    {% endblock %}
+    {% include "layout/footer.html" %}
+
+
+
+</body>
+
+</html>

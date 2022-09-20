@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arsenal Fan Site</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/reset.css">
+    <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="../static/css/footer.css">
+    <link rel="stylesheet" href="../static/css/login.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    </script>
+</head>
+
+<body>
+    {% include "layout/header.html" %}
+    {% block section %}
+    <div class="loginWrap">
+        <div class="loginForm">
+            <div class="login">
+                <div class="user">
+                    <label for="user_id">ID:<input type="text" id="user_id" placeholder="아이디를 입력해주세요"></label>
+                    <label for="user_pw">PW:<input type="text" id="user_pw" placeholder="패스워드를 입력해주세요"></label>
+                </div>
+                <div class="btn">
+                    <button class="login_btn" type="button">로그인</button>
+                    <a href="membership.html"><button class="signup" type="button">회원가입</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    {% include "layout/footer.html" %}
+</body>
+
+</html>
+
+
+

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arsenal Fan Site</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/reset.css">
+    <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="../static/css/footer.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    </script>
+</head>
+
+<body>
+    {% include "layout/header.html" %}
+    {% block section %}
+    <div class="bgWrap">
+        <div class="bg">
+            <div class="text"><p>아스널 풋볼 클럽(영어: Arsenal Football Club→아스널 축구단)은 런던을 연고지로
+                홀로웨이의 에미레이츠 스타디움을 홈구장으로 하는 잉글랜드의 축구 클럽이다.
+                현재 잉글랜드의 프리미어리그에 속해 있다.
+                아스널 FC(이하 아스널)는 현재 잉글랜드에서 13번의 리그 우승을 이뤘다.
+                FA컵에서 14번의 우승으로 잉글랜드 최다 우승 기록을 가지고있다.</p></div>
+            <img src="../static/img/bg.jpg" alt="backgroundimage">
+        </div>
+    </div>
+    {% endblock %}
+    {% include "layout/footer.html" %}
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arsenal Fan Site</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/reset.css">
+    <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="../static/css/footer.css">
+    <link rel="stylesheet" href="../static/css/membership.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    </script>
+</head>
+
+<body>
+   {% include "layout/header.html" %}
+    {% block section %}
+    <div class="box">
+        <form class="form_box">
+            <div class="membership">
+                <label for="id">ID :<input type="text" id="id"></label>
+                <label for="password">PASSWORD :<input type="password" id="password"></label>
+                <label for="password_check">PASSWORD 확인 :<input type="password" id="password_check"></label>
+                <button type="button" id="sign">회원가입</button>
+            </div>
+        </form>
+    </div>
+    {% endblock %}
+    {% include "layout/footer.html" %}
+
+
+</body>
+
+</html>

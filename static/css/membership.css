@@ -1,0 +1,25 @@
+.box{
+    width: 700px;
+    height: 350px;
+    margin: 200px auto 100px;
+    border: 1px solid #000;
+    border-radius: 25px;
+}
+
+.box>.form_box>.membership{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 50%;
+    margin: 75px auto;
+}
+.box>.form_box>.membership>button{
+    width: 25%;
+    margin: 50px auto 0;
+}
+.box>.form_box>.membership>label{
+    margin-top: 25px;
+}
+.box>.form_box>.membership>label>input{
+    margin-left: 15px;
+}
