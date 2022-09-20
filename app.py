@@ -41,6 +41,9 @@ def show_list():
     lists = list(db.list.find({}, {'_id': False}))
     return jsonify({'all_lists': lists})
 
+@app.route('/membership')
+def membershop():
+    return render_template('membership.html')
 
 @app.route('/list', methods=['POST'])
 def save_list():
