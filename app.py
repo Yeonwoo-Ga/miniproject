@@ -9,16 +9,100 @@ db = client.dbsparta
 
 from datetime import datetime
 
+SECRET_KEY = 'SPARTA'
+
+import jwt
+
+import datetime
+
+import hashlib
 
 ## HTML을 주는 부분
 @app.route('/')
 def home():
-    return render_template('index.html')
+    token_receive = request.cookies.get('mytoken')
+
+    users = list(db.user.find({}, {"_id": False}))
+    if token_receive is None:
+        return render_template('index.html', borders=users)
+
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({"id": payload['id']})
+        return render_template('index.html', borders=users ,nickname = user_info["nick"], id=user_info["id"])
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
+    
+@app.route('/membership')
+def membership():
+    return render_template('membership.html')
 
 
+@app.route('/api/membership', methods=['POST'])
+def api_membership():
+    id_receive = request.form['id_give']
+    pw_receive = request.form['pw_give']
+    nickname_receive = request.form['nickname_give']
+
+    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+
+    db.user.insert_one({'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive})
+
+    return jsonify({'result': 'success'})    
+    
+    
 @app.route('/login')
 def login():
     return render_template('login.html')
+
+
+@app.route('/api/login', methods=['POST'])
+def api_login():
+    id_receive = request.form['id_give']
+    pw_receive = request.form['pw_give']
+
+    #암호화
+    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+
+    # 유저찾기
+    result = db.user.find_one({'id': id_receive, 'pw': pw_hash})
+
+    # JWT 토큰발급
+    if result is not None:
+
+        payload = {
+            'id': id_receive,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60 * 60 * 24)
+        }
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+
+        # token주기
+        return jsonify({'result': 'success', 'token': token})
+    # 없을 시
+    else:
+        return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+
+
+@app.route('/api/nick', methods=['GET'])
+def api_valid():
+    token_receive = request.cookies.get('mytoken')
+
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        print(payload)
+
+        userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
+        return jsonify({'result': 'success', 'nickname': userinfo['nick']})
+    except jwt.ExpiredSignatureError:
+        return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
+    except jwt.exceptions.DecodeError:
+        return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
+
+
+
 
 
 @app.route('/post_list')
