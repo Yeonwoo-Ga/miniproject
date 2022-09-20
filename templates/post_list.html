@@ -36,12 +36,12 @@
                         let file = lists[i]['file']
 
 
-                        let temp_html = `<li id="post">
-                                            <a href="/post_view">
-                                                <p>${title}</p>
+                        let temp_html = `<div class="post">
+                                            <a href="post_view.html">
+                                                <p id="searchTitle">${title}</p>
                                                 <div id="image"><img src="../static/img/${file}" alt=""></div>
                                             </a>
-                                        </li>
+                                        </div>`
                         `
 
                         $('#list-box').append(temp_html)
