@@ -10,6 +10,19 @@
     <link rel="stylesheet" href="../static/css/reset.css">
     <link rel="stylesheet" href="../static/css/header.css">
     <link rel="stylesheet" href="../static/css/footer.css">
+    <style>
+        .content p, .posts *{
+            font-family:"Noto Sans KR", Serif !important;
+        }
+
+        .notice{
+            font-size: 30px;
+            margin-bottom: 1.25em;
+            padding-bottom: 0.45em;
+            border-bottom: 2px solid #232323;
+        }
+
+    </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript">
         // $(document).ready(function () {
@@ -51,11 +64,13 @@
 </head>
 
 <body>
-{% include "layout/header.html" %}
+{% include "layout/header2.html" %}
 {% block section %}
 <div class="viewWrap" id="view">
     <div class="posts">
+        <h1 class="notice">응원 게시판</h1>
         <div class="info">
+
             <h1 id="show_writer">제목 : {{ title }}</h1>
             <h2 id="show_date">작성일 : {{ time }}</h2>
         </div>

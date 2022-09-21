@@ -1,10 +1,12 @@
-from flask import Flask, render_template, jsonify, request, redirect
+from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 
 app = Flask(__name__)
-
+import certifi
 from pymongo import MongoClient
 
-client = MongoClient('mongodb+srv://test:sparta@cluster0.khegl5v.mongodb.net/Cluster0?retryWrites=true&w=majority')
+ca = certifi.where();
+client = MongoClient('mongodb+srv://test:sparta@cluster0.khegl5v.mongodb.net/Cluster0?retryWrites=true&w=majority',
+                     tlsCAFile=ca)
 db = client.dbsparta
 
 from datetime import datetime
@@ -18,7 +20,6 @@ import datetime
 import hashlib
 
 
-## HTML을 주는 부분
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
@@ -78,7 +79,7 @@ def api_login():
             'id': id_receive,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60 * 60 * 24)
         }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf8')
 
         # token주기
         return jsonify({'result': 'success', 'token': token})
@@ -92,7 +93,7 @@ def api_valid():
     token_receive = request.cookies.get('mytoken')
 
     try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256']).decode('utf8')
         print(payload)
 
         userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
@@ -117,7 +118,7 @@ def post_write():
 def get_posts():
     token_receive = request.cookies.get('mytoken')
     try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256']).decode('utf8')
         username_receive = request.args.get("username_give")
         if username_receive == "":
             posts = list(db.posts.find({}).sort("date", -1).limit(20))
@@ -144,7 +145,7 @@ def membershop():
 
 @app.route('/list', methods=['GET'])
 def show_list():
-    lists = list(db.list.find({}, {'_id': False}).sort('_id',-1))
+    lists = list(db.list.find({}, {'_id': False}).sort('_id', -1))
     return jsonify({'all_lists': lists})
 
 
@@ -176,8 +177,8 @@ def save_list():
 
     db.list.insert_one(doc)
 
-
     return jsonify({'msg': '게시글 작성 완료!'})
+
 
 @app.route("/list/delete", methods=["POST"])
 def list_delete():
@@ -185,37 +186,23 @@ def list_delete():
     db.list.delete_one({'num': int(num_receive)})
     return jsonify({'msg': '삭제 완료'})
 
+
 @app.route('/postview/<title>')
 def show_clicked_post(title):
-    token_receive = request.cookies.get('mytoken')
+    data = db.list.find_one({'title': title}, {'_id': False})
+    num = data['num']
+    title = data['title']
+    text = data['text']
+    file = data['file']
+    time = data['time']
 
-
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.user.find_one({'id': payload['id']})
-        user_id = user_info['id']
-
-        data = db.list.find_one({'title': title}, {'_id': False})
-        num = data['num']
-        title = data['title']
-        text = data['text']
-        file = data['file']
-        time = data['time']
-
-
-        return render_template("post_view.html",
-                               num=num,
-                               title=title,
-                               text=text,
-                               file=file,
-                               time=time,
-                               current_user=user_id)
-
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 올바르지 않습니다."))
+    return render_template("post_view.html",
+                           num=num,
+                           title=title,
+                           text=text,
+                           file=file,
+                           time=time,
+                           )
 
 
 if __name__ == '__main__':

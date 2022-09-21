@@ -14,24 +14,35 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-    
-        <script>
-        {% if msg %}
-        alert("{{ msg }}")
-        {% endif %}
+
+    <script>
 
         function login() {
+            let id = $('#userid').val();
+            let pw = $('#userpw').val();
+
+            if (id == "") {
+                alert('아이디를 입력해 주세요')
+            } else if (pw == "") {
+                alert('비밀번호를 입력해 주세요')
+            }
+
             $.ajax({
                 type: "POST",
                 url: "/api/login",
-                data: {id_give: $('#userid').val(), pw_give: $('#userpw').val()},
+                data: {
+                    id_give: id,
+                    pw_give: pw
+                },
                 success: function (response) {
                     if (response['result'] == 'success') {
-
                         $.cookie('mytoken', response['token']);
 
                         alert('로그인 완료!')
-                        window.location.href = '/'
+                        window.location.href='/post_list'
+                         $('#login_head').addClass("hidden");
+                        $('#logout_head').removeClass("hidden")
+
                     } else {
                         alert(response['msg'])
                     }
@@ -44,24 +55,26 @@
 </head>
 
 <body>
-    {% include "layout/header.html" %}
-    {% block section %}
-    <div class="loginWrap">
-        <div class="loginForm">
-            <div class="login">
-                <div class="user">
-                    <label for="userid">ID:<input type="text" id="userid" placeholder="아이디를 입력해주세요"></label>
-                    <label for="userpw">PW:<input type="text" id="userpw" placeholder="패스워드를 입력해주세요"></label>
-                </div>
-                <div class="btn">
-                    <button class="login_btn" type="button" onclick="login()">>로그인</button>
-                    <a href="/membership"><button class="signup" type="button">회원가입</button></a>
-                </div>
+{% include "layout/header.html" %}
+{% block section %}
+<div class="loginWrap">
+    <div class="loginForm">
+        <div class="login">
+            <div class="user">
+                <label for="userid">ID:<input type="text" id="userid" placeholder="아이디를 입력해주세요"></label>
+                <label for="userpw">PW:<input type="password" id="userpw" placeholder="패스워드를 입력해주세요"></label>
+            </div>
+            <div class="btn">
+                <button class="login_btn" type="button" onclick="login()">>로그인</button>
+                <a href="/membership">
+                    <button class="signup" type="button">회원가입</button>
+                </a>
             </div>
         </div>
     </div>
-    {% endblock %}
-    {% include "layout/footer.html" %}
+</div>
+{% endblock %}
+{% include "layout/footer.html" %}
 </body>
 
 </html>

@@ -1,22 +1,26 @@
 <head>
 
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Kirang+Haerang&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Kirang+Haerang&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+          rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
 
 <header id="header">
 
     <nav>
         <h1 class="logo">
-            <a href="/"><img src="../../static/img/logo.png" alt="logo">
+            <a href="javascript:void(0)"><img src="../../static/img/logo.png" alt="logo">
             </a>
         </h1>
         <h2 class="title">Arsenal Fan Site</h2>
         <ul class="gnb">
-            <li><a href="/login">로그인</a></li>
-            <li><a href="/post_list">게시글</a></li>
-            <li><a href="/post_write">글 쓰기</a></li>
+            <li id="login_head"><a href="/login">로그인</a></li>
+            <li id="logout_head" class="hidden"><a href="javascrip:void(0)">로그아웃</a></li>
+            <li class="hidden"><a href="/post_list">게시판</a></li>
+            <li><a href="https://www.arsenal.com/" target="_blank">아스날 바로가기</a></li>
         </ul>
     </nav>
 </header>
