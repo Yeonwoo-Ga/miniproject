@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect
 
 app = Flask(__name__)
 
@@ -185,6 +185,37 @@ def list_delete():
     db.list.delete_one({'num': int(num_receive)})
     return jsonify({'msg': '삭제 완료'})
 
+@app.route('/postview/<title>')
+def show_clicked_post(title):
+    token_receive = request.cookies.get('mytoken')
+
+
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({'id': payload['id']})
+        user_id = user_info['id']
+
+        data = db.list.find_one({'title': title}, {'_id': False})
+        num = data['num']
+        title = data['title']
+        text = data['text']
+        file = data['file']
+        time = data['time']
+
+
+        return render_template("post_view.html",
+                               num=num,
+                               title=title,
+                               text=text,
+                               file=file,
+                               time=time,
+                               current_user=user_id)
+
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 올바르지 않습니다."))
 
 
 if __name__ == '__main__':

@@ -12,51 +12,61 @@
     <link rel="stylesheet" href="../static/css/footer.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
-
-            listing()
-        })
-
-        function listing() {
-            $.ajax({
-                type: "GET",
-                url: "/list",
-                data: {},
-                success: function (response) {
-                    let lists = response['all_lists']
-                    for (let i = 0; i < lists.length; i++) {
-                        let title = lists[i]['title']
-                        let file = lists[i]['file']
-                        let time = lists[i]['time']
-                        let text = lists[i]['text']
-                        let temp_html = `<div class="posts">
-                                            <div class="info">
-                                                <h1 id="show_writer">${title}</h1>
-                                                <h2 id="show_date">${time}</h2>
-                                            </div>
-
-                                            <div class="content"><img src="${file}" alt="">
-                                                <p>${text}</p>
-                                            </div>
-                                        </div>`
-
-                        $('#view').append(temp_html)
-                    }
-                }
-            })
-        }
+        // $(document).ready(function () {
+        //
+        //     listing()
+        // })
+        //
+        // function listing() {
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/list",
+        //         data: {},
+        //         success: function (response) {
+        //             let lists = response['all_lists']
+        //
+        //             for (let i = 0; i < lists.length; i++) {
+        //                 let title = lists[i]['title']
+        //                 let file = lists[i]['file']
+        //                 let time = lists[i]['time']
+        //                 let text = lists[i]['text']
+        //
+        //                 let temp_html = `<div class="posts">
+        //                                     <div class="info">
+        //                                         <h1 id="show_writer">${title}</h1>
+        //                                         <h2 id="show_date">${time}</h2>
+        //                                     </div>
+        //
+        //                                     <div class="content"><img src="${file}" alt="">
+        //                                         <p>${text}</p>
+        //                                     </div>
+        //                                 </div>`
+        //
+        //                 $('#view').append(temp_html)
+        //             }
+        //         }
+        //     })
+        // }
     </script>
 </head>
 
 <body>
-    {% include "layout/header.html" %}
-    {% block section %}
-    <div class="viewWrap" id="view">
+{% include "layout/header.html" %}
+{% block section %}
+<div class="viewWrap" id="view">
+    <div class="posts">
+        <div class="info">
+            <h1 id="show_writer">{{ title }}</h1>
+            <h2 id="show_date">{{ time }}</h2>
+        </div>
 
+        <div class="content"><img src="../static/img/{{ file }}" alt="">
+            <p>{{ text }}</p>
+        </div>
     </div>
-    {% endblock %}
-    {% include "layout/footer.html" %}
-
+</div>
+{% endblock %}
+{% include "layout/footer.html" %}
 
 
 </body>

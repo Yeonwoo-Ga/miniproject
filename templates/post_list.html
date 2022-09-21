@@ -22,7 +22,7 @@
             listing()
         })
 
-       function delete_list(num) {
+        function delete_list(num) {
             $.ajax({
                 type: "POST",
                 url: "/list/delete",
@@ -48,7 +48,7 @@
                         let num = lists[i]['num']
 
                         let temp_html = `<div class="post">
-                                            <a href="/post_view" >
+                                            <a href="/postview/${title}" >
                                                 <p>${title}</p>
 
                                                 <div id="image"><img src="../static/img/${file}" alt=""></div>
@@ -100,7 +100,17 @@
     </div>
     <div class="post_list">
         <div class="list" id="list-box">
+            {%for post in list %}
+            <div class="post">
+                <a href="/{{ post.num }}">
+                    <p>{{ post.title }}</p>
 
+                    <div id="image"><img src="../static/img/${file}" alt=""></div>
+                </a>
+                <button onclick="delete_list(${num})">삭제하기</button>
+                <span class="comment">{{ post.text }}</span>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
