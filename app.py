@@ -1,3 +1,4 @@
+import pymongo
 from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
@@ -144,7 +145,7 @@ def membershop():
 
 @app.route('/list', methods=['GET'])
 def show_list():
-    lists = list(db.list.find({}, {'_id': False}))
+    lists = list(db.list.find({}, {'_id': False}).sort('_id',-1))
     return jsonify({'all_lists': lists})
 
 
