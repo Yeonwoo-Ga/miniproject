@@ -17,6 +17,7 @@ import datetime
 
 import hashlib
 
+
 ## HTML을 주는 부분
 @app.route('/')
 def home():
@@ -29,13 +30,13 @@ def home():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.user.find_one({"id": payload['id']})
-        return render_template('index.html', borders=users ,nickname = user_info["nick"], id=user_info["id"])
+        return render_template('index.html', borders=users, nickname=user_info["nick"], id=user_info["id"])
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
-    
+
 @app.route('/membership')
 def membership():
     return render_template('membership.html')
@@ -51,9 +52,9 @@ def api_membership():
 
     db.user.insert_one({'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive})
 
-    return jsonify({'result': 'success'})    
-    
-    
+    return jsonify({'result': 'success'})
+
+
 @app.route('/login')
 def login():
     return render_template('login.html')
@@ -64,7 +65,7 @@ def api_login():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
 
-    #암호화
+    # 암호화
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
     # 유저찾기
@@ -102,9 +103,6 @@ def api_valid():
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
 
-
-
-
 @app.route('/post_list')
 def post_list():
     return render_template('post_list.html')
@@ -115,9 +113,33 @@ def post_write():
     return render_template('post_write.html')
 
 
+@app.route("/get_posts", methods=['GET'])
+def get_posts():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        username_receive = request.args.get("username_give")
+        if username_receive == "":
+            posts = list(db.posts.find({}).sort("date", -1).limit(20))
+        else:
+            posts = list(db.posts.find({"username": username_receive}).sort("date", -1).limit(20))
+        for post in posts:
+            post["_id"] = str(post["_id"])
+            post["count_heart"] = db.likes.count_documents({"post_id": post["_id"], "type": "heart"})
+            post["heart_by_me"] = bool(db.likes.find_one({"post_id": post["_id"], "type": "heart"}))
+            return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "posts": posts, "my_username": payload["id"]})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+
 @app.route('/post_view')
 def post_view():
     return render_template('post_view.html')
+
+
+@app.route('/membership')
+def membershop():
+    return render_template('membership.html')
 
 
 @app.route('/list', methods=['GET'])
@@ -125,9 +147,6 @@ def show_list():
     lists = list(db.list.find({}, {'_id': False}))
     return jsonify({'all_lists': lists})
 
-@app.route('/membership')
-def membershop():
-    return render_template('membership.html')
 
 @app.route('/list', methods=['POST'])
 def save_list():
@@ -138,15 +157,17 @@ def save_list():
 
     extension = file.filename.split('.')[-1]
 
-    today = datetime.now()
+    today = datetime.datetime.now()
     mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
 
     filename = f'file-{mytime}'
 
     save_to = f'static/img/{filename}.{extension}'
+    num_list = list(db.list.find({}, {'_id': False}))
     file.save(save_to)
-
+    count = len(num_list) + 1
     doc = {
+        'num': count,
         'title': title_receive,
         'text': text_receive,
         'file': f'{filename}.{extension}',
@@ -155,7 +176,15 @@ def save_list():
 
     db.list.insert_one(doc)
 
+
     return jsonify({'msg': '게시글 작성 완료!'})
+
+@app.route("/list/delete", methods=["POST"])
+def list_delete():
+    num_receive = request.form['num_give']
+    db.list.delete_one({'num': int(num_receive)})
+    return jsonify({'msg': '삭제 완료'})
+
 
 
 if __name__ == '__main__':

@@ -45,3 +45,29 @@ table {
 a{
     text-decoration: none;
 }
+
+*{
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+button{
+	background-color: #fff;
+    border-color: #48c774;
+    color: #48c774;
+	cursor: pointer;
+    justify-content: center;
+    padding-bottom: calc(0.5em - 1px);
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: calc(0.5em - 1px);
+    text-align: center;
+    white-space: nowrap;
+	transition: .3s;
+}
+
+button:hover{
+	background-color:#48c774;
+	transition: .3s;
+	color: #fff;
+	border-radius: 15px;
+}

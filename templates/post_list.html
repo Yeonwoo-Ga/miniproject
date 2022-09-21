@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../static/css/reset.css">
     <link rel="stylesheet" href="../static/css/header.css">
     <link rel="stylesheet" href="../static/css/footer.css">
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
@@ -22,7 +22,17 @@
             listing()
         })
 
-
+       function delete_list(num) {
+            $.ajax({
+                type: "POST",
+                url: "/list/delete",
+                data: {num_give: num},
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload()
+                }
+            });
+        }
 
         function listing() {
             $.ajax({
@@ -33,16 +43,20 @@
                     let lists = response['all_lists']
                     for (let i = 0; i < lists.length; i++) {
                         let title = lists[i]['title']
+                        let text = lists[i]['text']
                         let file = lists[i]['file']
-
+                        let num = lists[i]['num']
 
                         let temp_html = `<div class="post">
-                                            <a href="post_view.html">
-                                                <p id="searchTitle">${title}</p>
+                                            <a href="/post_view" >
+                                                <p>${title}</p>
+
                                                 <div id="image"><img src="../static/img/${file}" alt=""></div>
                                             </a>
-                                        </div>`
-                        `
+                                            <button onclick="delete_list(${num})" >삭제하기</button>
+                                            <span class="comment">${text}</span>
+                                        </div>
+                                            `
 
                         $('#list-box').append(temp_html)
                     }
@@ -60,16 +74,17 @@
                     for (let i = 0; i < lists.length; i++) {
                         let title = lists[i]['title']
                         let include = $('#search').val()
-                        if(title.includes(include) == true && include !== null){
-                            $('.post').eq(i).css('display','block')
-                        }else{
-                            $('.post').eq(i).css('display','none')
+                        if (title.includes(include) == true && include !== null) {
+                            $('.post').eq(i).css('display', 'block')
+                        } else {
+                            $('.post').eq(i).css('display', 'none')
                         }
                     }
                 }
             })
 
         }
+
     </script>
 </head>
 
@@ -78,14 +93,15 @@
 {% block section %}
 <div class="postWrap">
     <div class="btnWrap">
-        <button type="button"><a href="/post_write">글 쓰기 +</a></button>
+        <button class="button is-success is-outlined"><a href="/post_write">글 쓰기 +</a></button>
         <input type="text" id="search" class="search" placeholder="제목을 검색해 주세요">
         <button id="searchBtn" onclick="search()">검색 &#128269;</button>
+
     </div>
     <div class="post_list">
-        <ul class="list" id="list-box">
+        <div class="list" id="list-box">
 
-        </ul>
+        </div>
     </div>
 </div>
 {% endblock %}
