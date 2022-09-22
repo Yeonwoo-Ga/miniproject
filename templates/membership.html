@@ -11,32 +11,16 @@
     <link rel="stylesheet" href="../static/css/header.css">
     <link rel="stylesheet" href="../static/css/footer.css">
     <link rel="stylesheet" href="../static/css/membership.css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript">
 
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-     <script>
+    <script>
 
-        function membership() {
-                $.ajax({
-                    type: "POST",
-                    url: "/api/membership",
-                    data: {
-                        id_give: $('#id').val(),
-                        pw_give: $('#password').val(),
-                        nickname_give: $('#username').val()
-                    },
-                    success: function (response) {
-                        if (response['result'] == 'success') {
-                            alert('회원가입이 완료되었습니다.')
-                            window.location.href = '/login'
-                        } else {
-                            alert(response['msg'])
-                        }
-                    }
-                })
-            }
+
 
     </script>
 
@@ -44,20 +28,20 @@
 </head>
 
 <body>
-   {% include "layout/header.html" %}
-    {% block section %}
-    <div class="box">
-        <form class="form_box">
-            <div class="membership">
-                <label for="id">ID :<input type="text" id="id"></label>
-                <label for="password">PASSWORD :<input type="password" id="password"></label>
-                <label for="username">NICKNAME :<input type="username" id="username"></label>
-                <button type="button" id="sign"onclick="membership()">회원가입</button>
-            </div>
-        </form>
-    </div>
-    {% endblock %}
-    {% include "layout/footer.html" %}
+{% include "layout/header.html" %}
+{% block section %}
+<div class="box">
+    <form class="form_box">
+        <div class="membership">
+            <label for="id">ID :<input type="text" id="id"></label>
+            <label for="password">PASSWORD :<input type="password" id="password"></label>
+            <label for="username">NICKNAME :<input type="username" id="username"></label>
+            <button type="button" id="sign" onclick="membership()">회원가입</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% include "layout/footer.html" %}
 
 
 </body>

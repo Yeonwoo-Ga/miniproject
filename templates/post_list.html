@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="../static/css/reset.css">
     <link rel="stylesheet" href="../static/css/header.css">
     <link rel="stylesheet" href="../static/css/footer.css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
@@ -95,7 +97,7 @@
 {% block section %}
 <div class="postWrap">
     <div class="btnWrap">
-        <button class="button is-success is-outlined" style="margin-right: 600px"><a href="/post_write" >글 쓰기 +</a></button>
+        <button class="button is-success is-outlined" ><a href="/post_write" style="color:#db0007;">글 쓰기 +</a></button>
         <input type="text" id="search" class="search" placeholder="제목을 검색해 주세요">
         <button id="searchBtn" onclick="search()">검색 &#128269;</button>
 
